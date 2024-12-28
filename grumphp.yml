@@ -1,0 +1,6 @@
+grumphp:
+  tasks:
+    composer: null
+    composer_script:
+      script: test
+
