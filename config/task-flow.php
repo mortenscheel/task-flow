@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Scheel\TaskFlow\State;
-
 return [
     'indent' => 2,
     'symbols' => [
@@ -20,9 +18,5 @@ return [
         'completed' => 'green',
         'skipped' => 'yellow',
         'failed' => 'red',
-    ],
-    'expanded_states' => [
-        State::Running,
-        State::Failed,
     ],
 ];
