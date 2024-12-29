@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace Scheel\TaskFlow;
 
 use Illuminate\Support\ServiceProvider;
+use Scheel\TaskFlow\Renderer\ConsoleRenderer;
+use Scheel\TaskFlow\Renderer\Renderer;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 final class TaskFlowServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        parent::register();
         $this->mergeConfigFrom(__DIR__.'/../config/task-flow.php', 'task-flow');
+        $this->app->bind(Renderer::class, fn (): ConsoleRenderer => new ConsoleRenderer(
+            (new ConsoleOutput)->getErrorOutput()
+        ));
     }
 
     public function boot(): void
@@ -23,12 +28,6 @@ final class TaskFlowServiceProvider extends ServiceProvider
             $this->publishesMigrations([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'migrations');
-            // $this->publishes([
-            //     __DIR__.'/../resources/views' => resource_path('views/scheel/task-flow'),
-            // ], 'views');
         }
-
-        // $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'task-flow');
     }
 }

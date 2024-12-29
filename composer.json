@@ -1,11 +1,11 @@
 {
     "name": "mortenscheel/task-flow",
-    "description": "A skeleton repository for my packages",
+    "description": "Pipeline for nested console tasks",
     "license": "MIT",
     "keywords": [
-        "php",
-        "skeleton",
-        "package"
+        "laravel",
+        "console",
+        "pipeline"
     ],
     "authors": [
         {
@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": "^8.3.0",
-        "illuminate/contracts": "^11.36"
+        "illuminate/contracts": "^11.36",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
@@ -23,6 +24,7 @@
         "nunomaduro/collision": "^8.5",
         "orchestra/testbench": "^9.9",
         "pestphp/pest": "^3.7.1",
+        "pestphp/pest-plugin-laravel": "^3.0",
         "pestphp/pest-plugin-type-coverage": "^3.2.3",
         "phpro/grumphp-shim": "^2.10",
         "phpstan/extension-installer": "^1.4",
@@ -36,8 +38,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Scheel\\TaskFlow\\": "src/",
-            "Scheel\\TaskFlow\\Database\\Factories\\": "database/factories/"
+            "Scheel\\TaskFlow\\": "src/"
         }
     },
     "autoload-dev": {
@@ -84,7 +85,7 @@
             "@putenv XDEBUG_MODE=coverage",
             "pest --colors=always --parallel --coverage --min=100"
         ],
-        "test:phpstan": "phpstan analyse --ansi",
+        "test:phpstan": "phpstan analyse --ansi --memory-limit=-1",
         "test:pint": "pint --test",
         "test:rector": "rector --dry-run"
     }

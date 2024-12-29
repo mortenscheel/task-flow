@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-use Scheel\TaskFlow\Tests\TestCase;
+namespace Scheel\TaskFlow\Tests;
 
 uses(TestCase::class)->in(__DIR__);
