@@ -3,9 +3,10 @@
     "description": "Pipeline for nested console tasks",
     "license": "MIT",
     "keywords": [
-        "laravel",
+        "php",
         "console",
-        "pipeline"
+        "pipeline",
+        "renderer"
     ],
     "authors": [
         {
@@ -15,8 +16,8 @@
     ],
     "require": {
         "php": "^8.3.0",
-        "illuminate/contracts": "^11.36",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "symfony/console": "^7.2"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",

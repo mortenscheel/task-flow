@@ -14,9 +14,15 @@ final class TaskFlowServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/task-flow.php', 'task-flow');
-        $this->app->bind(Renderer::class, fn (): ConsoleRenderer => new ConsoleRenderer(
-            (new ConsoleOutput)->getErrorOutput()
-        ));
+        $this->app->bind(Renderer::class, function (): ConsoleRenderer {
+            /** @var array<string, mixed> $config */
+            $config = $this->app->make('config')->get('task-flow');
+
+            return new ConsoleRenderer(
+                (new ConsoleOutput)->getErrorOutput(),
+                $config,
+            );
+        });
     }
 
     public function boot(): void

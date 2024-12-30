@@ -11,7 +11,6 @@ use Symfony\Component\Console\Cursor;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
 
-use function config;
 use function mb_strimwidth;
 use function sprintf;
 
@@ -23,23 +22,35 @@ final class ConsoleRenderer implements Renderer
 
     private ?string $previousMessage = null;
 
-    private readonly int $indent;
+    /** @var array<string, mixed> */
+    private array $config;
 
-    /** @var array<string, string> */
-    private array $symbols;
-
-    /** @var array<string, string> */
-    private array $colors;
-
+    /** @param array<string, mixed> $config */
     public function __construct(
         private readonly OutputInterface $output,
-
+        array $config = [],
     ) {
         $this->terminal = new Terminal;
         $this->cursor = new Cursor($this->output);
-        $this->indent = config('task-flow.indent'); //@phpstan-ignore-line
-        $this->symbols = config('task-flow.symbols'); //@phpstan-ignore-line
-        $this->colors = config('task-flow.colors'); //@phpstan-ignore-line
+        $this->config = [
+            'indent' => 2,
+            'symbols' => [
+                'pending' => '…',
+                'running' => '▶',
+                'completed' => '✓',
+                'skipped' => '⏭',
+                'failed' => '✗',
+            ],
+            /** @see https://symfony.com/doc/current/console/coloring.html  */
+            'colors' => [
+                'pending' => 'gray',
+                'running' => 'bright-white',
+                'completed' => 'green',
+                'skipped' => 'yellow',
+                'failed' => 'red',
+            ],
+            ...$config,
+        ];
     }
 
     public function render(array $tasks): void
@@ -63,12 +74,13 @@ final class ConsoleRenderer implements Renderer
         if ($failed || $task->getState() === State::Failed) {
             $failed = true;
         }
-        $indent = str_repeat(' ', $level * $this->indent);
+        // @phpstan-ignore-next-line
+        $indent = str_repeat(' ', $level * $this->config['indent'] ?? throw new RuntimeException('Invalid config'));
         $state = $task->getState();
         /** @var string $symbol */
-        $symbol = $this->symbols[$state->value] ?? throw new RuntimeException('Invalid state');
+        $symbol = $this->config['symbols'][$state->value] ?? throw new RuntimeException('Invalid config'); // @phpstan-ignore-line
         /** @var string $color */
-        $color = $this->colors[$state->value] ?? throw new RuntimeException('Invalid state');
+        $color = $this->config['colors'][$state->value] ?? throw new RuntimeException('Invalid config'); // @phpstan-ignore-line
         $title = $this->truncateTitle($task->getTitle(), $level);
 
         $formatted = sprintf(

@@ -13,6 +13,7 @@ return RectorConfig::configure()
     ->withSkip([
         AddOverrideAttributeToOverriddenMethodsRector::class,
     ])
+    ->withImportNames(removeUnusedImports: true)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

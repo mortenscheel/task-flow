@@ -18,7 +18,9 @@ class TestRenderer
     public static function register(): self
     {
         $instance = new self(new BufferedOutput);
-        App::instance(Renderer::class, new ConsoleRenderer($instance->buffer));
+        /** @var array<string, mixed> $config */
+        $config = config('task-flow');
+        App::instance(Renderer::class, new ConsoleRenderer($instance->buffer, $config));
 
         return $instance;
     }
