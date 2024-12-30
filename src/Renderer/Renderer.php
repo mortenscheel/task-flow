@@ -10,4 +10,6 @@ interface Renderer
 {
     /** @param Task[] $tasks */
     public function render(array $tasks): void;
+
+    public function reset(): void;
 }

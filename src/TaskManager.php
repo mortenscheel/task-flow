@@ -70,4 +70,15 @@ class TaskManager
 
         return $context;
     }
+
+    public function interactive(callable $callback): mixed
+    {
+        $this->renderer->reset();
+        try {
+            return $callback();
+        } finally {
+            $this->render();
+        }
+
+    }
 }

@@ -39,11 +39,17 @@ final class Context
     public function updateTitle(string $title): void
     {
         $this->manager->getCurrentTask()->setTitle($title);
+        $this->render();
     }
 
     public function render(): void
     {
         $this->manager->render();
+    }
+
+    public function interactive(callable $callback): mixed
+    {
+        return $this->manager->interactive($callback);
     }
 
     public function has(string $key): bool

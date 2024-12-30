@@ -69,6 +69,18 @@ final class ConsoleRenderer implements Renderer
         $this->previousMessage = $message;
     }
 
+    public function reset(string $previousMessage = ''): void
+    {
+        $lineCount = substr_count($previousMessage !== '' && $previousMessage !== '0' ? $previousMessage : $this->previousMessage ?? '', PHP_EOL);
+        for ($i = 0; $i < $lineCount; $i++) {
+            $this->cursor->moveUp();
+            $this->cursor->clearLine();
+        }
+        if ($previousMessage === '') {
+            $this->previousMessage = null;
+        }
+    }
+
     private function formatTask(Task $task, int $level = 0, bool $failed = false): string
     {
         if ($failed || $task->getState() === State::Failed) {
@@ -98,15 +110,6 @@ final class ConsoleRenderer implements Renderer
         }
 
         return $formatted;
-    }
-
-    private function reset(string $previousMessage): void
-    {
-        $lineCount = substr_count($previousMessage, PHP_EOL);
-        for ($i = 0; $i < $lineCount; $i++) {
-            $this->cursor->moveUp();
-            $this->cursor->clearLine();
-        }
     }
 
     private function truncateTitle(string $title, int $level): string

@@ -17,6 +17,7 @@ use Scheel\TaskFlow\Tests\TestRenderer;
 use function app;
 use function expect;
 use function it;
+use function Laravel\Prompts\info;
 
 it('fails if no tasks are provided', function (): void {
     TaskFlow::run([]);
@@ -25,7 +26,7 @@ it('fails if no tasks are provided', function (): void {
 it('can run with NullRenderer', function (): void {
     app()->instance(Renderer::class, new NullRenderer);
     TaskFlow::run([
-        Task::make('Task 1', fn (): null => null),
+        Task::make('Task 1', fn (Context $context): null => $context->interactive(fn (): null => null)),
     ]);
     expect(true)->toBeTrue();
 });
@@ -64,6 +65,8 @@ RESET
         ],
         '
 ▶ Foo
+RESET
+▶ Bar
 RESET
 ✓ Bar',
     ],
@@ -206,6 +209,11 @@ RESET
 ✓ 1. Enable task 2
 ✓ 2. Disable task 3
 ⏭ 3. Disable task 3
+▶ Hello world!
+RESET
+✓ 1. Enable task 2
+✓ 2. Disable task 3
+⏭ 3. Disable task 3
 ✓ Hello world!',
     ],
     'custom-config' => fn (): array => [
@@ -318,6 +326,18 @@ RESET
             'task-flow.symbols.failed' => '😭',
             'task-flow.symbols.skipped' => '⏩',
         ],
-
+    ],
+    'interactive' => [
+        [
+            Task::make('Interactive', fn (Context $context): mixed => $context->interactive(function (): void {
+                info('Hello world');
+            })),
+        ],
+        '
+▶ Interactive
+RESET
+▶ Interactive
+RESET
+✓ Interactive',
     ],
 ]);

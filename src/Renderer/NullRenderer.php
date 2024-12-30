@@ -6,8 +6,7 @@ namespace Scheel\TaskFlow\Renderer;
 
 final class NullRenderer implements Renderer
 {
-    public function render(array $tasks): void
-    {
-        // Do nothing
-    }
+    public function render(array $tasks): void {}
+
+    public function reset(): void {}
 }
