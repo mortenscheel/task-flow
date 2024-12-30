@@ -79,7 +79,7 @@ class Task
         if ($this->action) {
             try {
                 call_user_func($this->action, $context);
-                if ($this->state === State::Failed) { //@phpstan-ignore-line
+                if ($this->state === State::Failed) { // @phpstan-ignore-line
                     // Aborted from within the task
                     throw new TaskFlowException("Task '$this->title' failed");
                 }
@@ -95,7 +95,7 @@ class Task
 
                 return;
             }
-            if ($this->state === State::Skipped) { //@phpstan-ignore-line
+            if ($this->state === State::Skipped) { // @phpstan-ignore-line
                 $context->render();
 
                 return;
