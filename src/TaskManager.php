@@ -43,7 +43,7 @@ class TaskManager
     public function run(
         array $tasks,
         array $contextData = [],
-    ): void {
+    ): Context {
         if ($tasks === []) {
             throw new TaskFlowException('No tasks provided');
         }
@@ -67,5 +67,7 @@ class TaskManager
         if ($error) {
             throw $error;
         }
+
+        return $context;
     }
 }
